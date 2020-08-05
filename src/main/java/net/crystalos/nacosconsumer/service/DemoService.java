@@ -27,6 +27,10 @@ public class DemoService {
     public String times() {
         //从注册中心获取服务地址信息
         ServiceInstance serviceInstance = loadBalancerClient.choose(demoServiceId);
+       if(serviceInstance == null) {
+            //当服务为空的时候，提示服务未运行
+            return "Sorry Service is not running!";
+        }
         //生成服务地址，根据IP和端口拼接
         String url = String.format("http://%s:%s/nowtimes", serviceInstance.getHost(), serviceInstance.getPort());
         System.out.println("request url:" + url);
@@ -36,6 +40,10 @@ public class DemoService {
     public String hello(String name) {
         //从注册中心获取服务地址信息
         ServiceInstance serviceInstance = loadBalancerClient.choose(demoServiceId);
+        if(serviceInstance == null) {
+            //当服务为空的时候，提示服务未运行
+            return "Sorry Service is not running!";
+        }
         //生成服务地址，直接获取URL
         String url = serviceInstance.getUri()+"/hello/"+name;
         System.out.println("request url:" + url);
