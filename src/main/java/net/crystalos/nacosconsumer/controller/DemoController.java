@@ -1,11 +1,10 @@
 package net.crystalos.nacosconsumer.controller;
 
 import net.crystalos.nacosconsumer.service.DemoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -17,6 +16,7 @@ import javax.annotation.Resource;
  * @version 1.0
  * Copyright (c) 2020 ♀Crystal♀ ,Inc. All Rights Reserved.
  */
+@RestController
 public class DemoController {
 
     @Resource(name = "demoService")
