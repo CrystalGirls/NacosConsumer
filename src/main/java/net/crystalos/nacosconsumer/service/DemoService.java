@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Description: 用例
@@ -20,20 +21,25 @@ public class DemoService {
     private LoadBalancerClient loadBalancerClient;
 
     //用例的服务名称
-    private String demoServiceId = "NacosService";
+    private final String demoServiceId = "NacosService";
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public String times() {
         //从注册中心获取服务地址信息
         ServiceInstance serviceInstance = loadBalancerClient.choose(demoServiceId);
-        //生成全新的定位地址
+        //生成服务地址，根据IP和端口拼接
         String url = String.format("http://%s:%s/nowtimes", serviceInstance.getHost(), serviceInstance.getPort());
         System.out.println("request url:" + url);
-        return url;
+        //向服务端请求数据
+        return restTemplate.getForObject(url, String.class);
     }
     public String hello(String name) {
+        //从注册中心获取服务地址信息
         ServiceInstance serviceInstance = loadBalancerClient.choose(demoServiceId);
-        String url = String.format("http://%s:%s/hello/"+name, serviceInstance.getHost(), serviceInstance.getPort());
+        //生成服务地址，直接获取URL
+        String url = serviceInstance.getUri()+"/hello/"+name;
         System.out.println("request url:" + url);
-        return url;
+        //向服务端请求数据
+        return restTemplate.getForObject(url, String.class);
     }
 }
